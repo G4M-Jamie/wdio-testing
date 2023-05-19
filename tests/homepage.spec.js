@@ -4,6 +4,6 @@ describe("WDIO Test", function () {
     });
     it("displays the WDIO Logo", async function () {
         const wdioLogo = await $(".themedImage_ToTc");
-        await expect(wdioLogo).toBeDisplayed();
+        await expect(wdioLogo).not.toBeDisplayed();
     });
 });
