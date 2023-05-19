@@ -16,7 +16,7 @@ exports.config = {
         }
        // await totalSpecFiles++;
     },
-    onComplete: async () => {
+    afterSession: async () => {
         const myVariable = "Hello, World!";
         console.log(`::set-output name=variable::${myVariable}`);
 
