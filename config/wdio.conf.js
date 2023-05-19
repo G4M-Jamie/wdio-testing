@@ -23,7 +23,7 @@ exports.config = {
         // Your existing afterSession logic
 
         // Export testOutput as an environment variable
-        process.env.TEST_OUTPUT = testOutput;
+        console.log("::set-env name=TEST_OUTPUT::" + testOutput);
     },
 
     runner: 'local',
