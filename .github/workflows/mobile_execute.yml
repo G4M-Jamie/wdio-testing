@@ -59,6 +59,7 @@ jobs:
           echo "Failed: ${{ steps.test-runner.outputs.failedSpecFiles }}"
 
       - name: Display Test Counts
+        if: ${{ always() }}
         run: |
           echo "Passed: ${{ env.WDIO_PASSED_SPECS }}"
           echo "Failed: ${{ env.WDIO_FAILED_SPECS }}"
