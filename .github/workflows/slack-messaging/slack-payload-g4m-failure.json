@@ -4,9 +4,19 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":gear: Whoops, something went wrong, your Gear4music test suite has failed :sob:",
+                "text": ":gear: Whoops, your Gear4music test suite has failed :sob:",
                 "emoji": true
             }
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "plain_text",
+                    "text": "Duration: ${{ env.JOB_TIME }}",
+                    "emoji": true
+                }
+            ]
         },
         {
             "type": "actions",
