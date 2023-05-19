@@ -55,10 +55,12 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-      - name: Print test output
+      - name: Capture Test Results
         if: ${{ always() }}
-        run: echo "TEST_OUTPUT=${{ env.TEST_OUTPUT }}" >> $GITHUB_ENV
-
+        id: capture-results
+        run: |
+          test_results=$(npx wdio --spec-reporter-options=summary=true)
+          echo "::set-output name=test-results::${test_results}"
 
       - name: Notify on Slack
         uses: slackapi/slack-github-action@v1.24.0
