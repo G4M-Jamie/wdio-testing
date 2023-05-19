@@ -1,33 +1,45 @@
 name: WDIO Test
-'on':
-  - push
+
+on:
+  push
+
 jobs:
   test-runner:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         run: ["g4m", "av"]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Update All Packages
         run: sudo apt-get update -y
+
       - name: Download Chrome browser
         run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
       - name: Install Chrome browser
         run: sudo dpkg -i google-chrome-stable_current_amd64.deb
+
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: npm
+
       - name: NPM Install
         run: npm install
+
       - name: Install specific version of Chromedriver for GH
-        run: npm install chromedriver@${{vars.CHROME_VERSION}}
-      - name: Run Test - ${{matrix.run}}
+        run: npm install chromedriver@${{ vars.CHROME_VERSION }}
+
+      - name: Run Test - ${{ matrix.run }}
         run: npm test
+
       - name: Set job report variables
         if: ${{ always() }}
         run: |
@@ -39,12 +51,11 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-          echo "PASSED_SPEC_FILES=${{ steps.build.outputs.passedSpecFiles }}" >> $GITHUB_ENV
-          echo "FAILED_SPEC_FILES=${{ steps.build.outputs.failedSpecFiles }}" >> $GITHUB_ENV
+          echo "passedSpecFiles=${{ steps.test-runner.outputs.passedSpecFiles }}" >> $GITHUB_ENV
+          echo "failedSpecFiles=${{ steps.test-runner.outputs.failedSpecFiles }}" >> $GITHUB_ENV
 
-          sed -i "s/\$PASSED_SPEC_FILES/${{ env.PASSED_SPEC_FILES }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          sed -i "s/\$FAILED_SPEC_FILES/${{ env.FAILED_SPEC_FILES }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-
+          sed -i "s/\$passedSpecFiles/${{ env.passedSpecFiles }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$failedSpecFiles/${{ env.failedSpecFiles }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
       - name: Notify on Slack
         if: ${{ always() }}
@@ -54,5 +65,5 @@ jobs:
           payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ env.MATRIX_RUN }}-${{ job.status }}.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
-          PASSED_SPEC_FILES: ${{ steps.count-spec-files.outputs.passedSpecFiles }}
-          FAILED_SPEC_FILES: ${{ steps.count-spec-files.outputs.failedSpecFiles }}
+          passedSpecFiles: ${{ env.passedSpecFiles }}
+          failedSpecFiles: ${{ env.failedSpecFiles }}
