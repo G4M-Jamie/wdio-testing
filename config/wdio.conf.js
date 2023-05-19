@@ -20,6 +20,10 @@ exports.config = {
         process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
         process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
         process.stdout.write(`::set-output name=totalSpecFiles::"${totalSpecFiles}"\n`);
+
+        const myVariable = "Hello, World!";
+        console.log(`::set-output name=variable::${JSON.stringify({ variable: myVariable })}`);
+
     },
 
     runner: 'local',

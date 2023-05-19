@@ -52,18 +52,9 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-          echo "::set-output name=passedSpecFiles::${{ steps.test-runner.outputs.passedSpecFiles }}"
-          echo "::set-output name=failedSpecFiles::${{ steps.test-runner.outputs.failedSpecFiles }}"
-          
-          echo "Passed: ${{ steps.test-runner.outputs.passedSpecFiles }}"
-          echo "Failed: ${{ steps.test-runner.outputs.failedSpecFiles }}"
-
-      - name: Display Test Counts
+      - name: Use JavaScript output
         if: ${{ always() }}
-        run: |
-          echo "Passed: ${{ env.WDIO_PASSED_SPECS }}"
-          echo "Failed: ${{ env.WDIO_FAILED_SPECS }}"
-          echo "Total: ${{ env.WDIO_TOTAL_SPECS }}"
+        run: echo "The variable value is ${{ fromJson(steps.myStep.outputs.variable).variable }}"
 
 
       - name: Notify on Slack
