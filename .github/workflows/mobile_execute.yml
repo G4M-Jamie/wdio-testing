@@ -41,6 +41,7 @@ jobs:
         run: npm test
 
       - name: Set job report variables
+        id: test-results
         if: ${{ always() }}
         run: |
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
@@ -51,19 +52,16 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-          echo "passedSpecFiles=${{ steps.test-runner.outputs.passedSpecFiles }}" >> $GITHUB_ENV
-          echo "failedSpecFiles=${{ steps.test-runner.outputs.failedSpecFiles }}" >> $GITHUB_ENV
-
-          sed -i "s/\$passedSpecFiles/${{ env.passedSpecFiles }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          sed -i "s/\$failedSpecFiles/${{ env.failedSpecFiles }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          echo "::set-output name=passedSpecFiles::${{ steps.test-runner.outputs.passedSpecFiles }}"
+          echo "::set-output name=failedSpecFiles::${{ steps.test-runner.outputs.failedSpecFiles }}"
 
       - name: Notify on Slack
         if: ${{ always() }}
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: "C058GP7SQA0"
-          payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ env.MATRIX_RUN }}-${{ job.status }}.json"
+          payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
-          passedSpecFiles: ${{ env.passedSpecFiles }}
-          failedSpecFiles: ${{ env.failedSpecFiles }}
+          PASSED_SPEC_FILES: ${{ steps.test-results.outputs.passedSpecFiles }}
+          FAILED_SPEC_FILES: ${{ steps.test-results.outputs.failedSpecFiles }}
