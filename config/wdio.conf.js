@@ -18,6 +18,7 @@ exports.config = {
         // Your existing afterSession logic
 
         // Export testOutput as an environment variable
+        const testOutput = 1;
         console.log("::set-env name=TEST_OUTPUT::" + testOutput);
     },
 
