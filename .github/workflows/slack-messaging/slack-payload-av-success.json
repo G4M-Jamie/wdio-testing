@@ -4,7 +4,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":sound: AV API test suite has Passed :tada:",
+                "text": ":sound: Great news! Your AV API test suite has Passed :tada:",
                 "emoji": true
             }
         },
