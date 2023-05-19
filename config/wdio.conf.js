@@ -16,7 +16,7 @@ exports.config = {
         }
        // await totalSpecFiles++;
     },
-    afterAll: async () => {
+    onComplete: async () => {
         process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
         process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
         process.stdout.write(`::set-output name=totalSpecFiles::"${totalSpecFiles}"\n`);
