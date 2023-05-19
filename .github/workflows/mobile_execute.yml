@@ -39,6 +39,8 @@ jobs:
 
       - name: Run Test - ${{ matrix.run }}
         run: npm test
+        env:
+          VARIABLE: ${{ steps.myStep.outputs.variable }}
 
       - name: Set job report variables
         id: test-results
@@ -54,7 +56,7 @@ jobs:
 
       - name: Use JavaScript output
         if: ${{ always() }}
-        run: echo "The variable value is ${{ fromJson(steps.myStep.outputs.variable).variable }}"
+        run: echo "The variable value is $VARIABLE"
 
 
       - name: Notify on Slack
