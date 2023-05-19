@@ -38,13 +38,9 @@ jobs:
         run: npm install chromedriver@${{ vars.CHROME_VERSION }}
 
       - name: Run Test - ${{ matrix.run }}
-        id: testing
         run: npm test
-        env:
-          VARIABLE: ${{ steps.testing.outputs.variable }}
 
       - name: Set job report variables
-        id: test-results
         if: ${{ always() }}
         run: |
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
@@ -55,14 +51,9 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-      - name: Capture Test Results
-        if: ${{ always() }}
-        id: capture-results
-        run: |
-          test_results=$(npx wdio --spec-reporter-options=summary=true)
-          echo "::set-output name=test-results::${test_results}"
-
+      
       - name: Notify on Slack
+        if: ${{ always() }}
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: "C058GP7SQA0"
