@@ -54,9 +54,11 @@ jobs:
 
           echo "::set-output name=passedSpecFiles::${{ steps.test-runner.outputs.passedSpecFiles }}"
           echo "::set-output name=failedSpecFiles::${{ steps.test-runner.outputs.failedSpecFiles }}"
+          
+          echo "Passed: ${{ steps.test-runner.outputs.passedSpecFiles }}"
+          echo "Failed: ${{ steps.test-runner.outputs.failedSpecFiles }}"
 
       - name: Notify on Slack
-        if: ${{ always() }}
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: "C058GP7SQA0"
