@@ -1,5 +1,9 @@
 const browsers = require("./browsers");
 
+let totalSpecFiles = 0;
+let passedSpecFiles = 0;
+let failedSpecFiles = 0;
+
 exports.config = {
     //
     // ====================
@@ -284,4 +288,22 @@ exports.config = {
     */
     // onReload: function(oldSessionId, newSessionId) {
     // }
+
+
+    beforeSuite: function (suite) {
+        totalSpecFiles++;
+    },
+    afterTest: function (test, context, { error, result, duration, passed }) {
+        if (passed) {
+            passedSpecFiles++;
+        } else {
+            failedSpecFiles++;
+        }
+    },
+
+    onComplete: function () {
+        console.log('Total Spec Files:', totalSpecFiles);
+        console.log('Passed Spec Files:', passedSpecFiles);
+        console.log('Failed Spec Files:', failedSpecFiles);
+    }
 }

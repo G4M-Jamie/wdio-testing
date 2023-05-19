@@ -39,6 +39,12 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
+          echo "::set-output name=passedSpecFiles::${{ steps.test.outputs.passedSpecFiles }}"
+          echo "::set-output name=failedSpecFiles::${{ steps.test.outputs.failedSpecFiles }}"
+
+
+
+
       - name: Notify on Slack
         if: ${{ always() }}
         uses: slackapi/slack-github-action@v1.24.0
@@ -47,3 +53,5 @@ jobs:
           payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ env.MATRIX_RUN }}-${{ job.status }}.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
+          PASSED_SPEC_FILES: ${{ steps.count-spec-files.outputs.passedSpecFiles }}
+          FAILED_SPEC_FILES: ${{ steps.count-spec-files.outputs.failedSpecFiles }}
