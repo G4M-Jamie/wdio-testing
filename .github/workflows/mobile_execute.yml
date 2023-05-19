@@ -47,7 +47,7 @@ jobs:
           sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "JOB_TIME=${{ job.elapsed_time }}" >> $GITHUB_ENV
-          sed -i "s/\$JOB_TIME/${{ env.JOB_TIME }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\\\$JOB_TIME/${{ env.JOB_TIME }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
           sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"

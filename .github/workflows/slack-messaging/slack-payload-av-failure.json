@@ -4,7 +4,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":sound: Oh no! Your AV API test suite Failed :cry:",
+                "text": ":sound: Oh no! Desktop AV test suite Failed",
                 "emoji": true
             }
         },
