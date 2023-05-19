@@ -10,14 +10,14 @@ exports.config = {
 
     afterTest: async (test, context, result) => {
         if (result.passed) {
-            passedSpecFiles++;
-            process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
+            await passedSpecFiles++;
+            await process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
         } else {
-            failedSpecFiles++;
-            process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
+            await failedSpecFiles++;
+            await process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
         }
-        totalSpecFiles++;
-        process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
+        await totalSpecFiles++;
+        await process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
 
     runner: 'local',
