@@ -18,7 +18,7 @@ exports.config = {
     },
     afterSession: async () => {
         const myVariable = "Hello, World!";
-        console.log(`::set-output name=variable::${myVariable}`);
+        console.log(`::set-output name=variable::${{myVariable}}`);
 
     },
 
