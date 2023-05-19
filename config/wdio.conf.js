@@ -15,10 +15,12 @@ exports.config = {
             await failedSpecFiles++;
         }
        // await totalSpecFiles++;
-    },
-    afterSession: async () => {
+
         const myVariable = "Hello, World!";
         console.log(`::set-output name=variable::${myVariable}`);
+    },
+    afterSession: async () => {
+
 
     },
 
