@@ -57,7 +57,7 @@ jobs:
 
       - name: Print test output
         if: ${{ always() }}
-        run: echo "Test Output= ${{ env.TEST_OUTPUT }}"
+        run: echo "Test Output= $${{ env.TEST_OUTPUT }}"
 
 
       - name: Notify on Slack
