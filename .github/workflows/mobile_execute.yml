@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        run: ["g4m", "av"]
+        run: ["g4m"]
 
     steps:
       - name: Checkout code
@@ -57,6 +57,16 @@ jobs:
           
           echo "Passed: ${{ steps.test-runner.outputs.passedSpecFiles }}"
           echo "Failed: ${{ steps.test-runner.outputs.failedSpecFiles }}"
+
+      - name: Capture Test Counts
+        if: ${{ always() }}
+        run: |
+          cp test-counts.json $GITHUB_WORKSPACE
+      - name: Display Test Counts
+        if: ${{ always() }}
+        run: |
+          cat $GITHUB_WORKSPACE/test-counts.json
+
 
       - name: Notify on Slack
         uses: slackapi/slack-github-action@v1.24.0

@@ -1,6 +1,6 @@
 const browsers = require("./browsers");
 const { incrementTotalSpecFiles, incrementPassedSpecFiles, incrementFailedSpecFiles, getTotalSpecFiles, getPassedSpecFiles, getFailedSpecFiles } = require('./testCounts');
-
+const fs = require('fs');
 let totalSpecFiles = 0;
 let passedSpecFiles = 0;
 let failedSpecFiles = 0;
@@ -20,9 +20,12 @@ exports.config = {
         await process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
     afterAll: async () => {
-        process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
-        process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
-        process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
+        const counts = {
+            passedSpecFiles,
+            failedSpecFiles,
+            totalSpecFiles
+        };
+        fs.writeFileSync('test-counts.json', JSON.stringify(counts));
     },
 
     runner: 'local',
