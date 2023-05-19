@@ -11,6 +11,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Update All Packages
+        run: sudo apt-get update -y
+      - name: Install Chrome browser
+        run: sudo dpkg -i google-chrome-stable_current_amd64.deb
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - name: NPM Install
+        run: npm install
       - name: Run Test - ${{matrix.run}}
         run: npm test
       - name: Set job report variables
