@@ -1,0 +1,35 @@
+name: WDIO Test
+'on':
+  - push
+  - workflow_dispatch
+jobs:
+  test-runner:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        run: ["g4m"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Desktop WDIO Tests - ${{matrix.run}}
+        run: npm run test:pipeline:desktop -- --suite=e2e-${{matrix.run}}
+      - name: Set job report variables
+        run: |
+          echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
+          sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+
+          echo "URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+          sed -i "s/\$URL/${{ env.URL }}/g" ".github/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+
+          echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
+
+      - name: Notify on Slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: "C058GP7SQA0"
+          payload-file-path: ".github/slack-messaging/slack-payload-${{ env.MATRIX_RUN }}-${{ job.status }}.json"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
