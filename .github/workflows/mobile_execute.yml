@@ -56,7 +56,7 @@ jobs:
 
       - name: Use JavaScript output
         if: ${{ always() }}
-        run: echo "The variable value is $VARIABLE"
+        run: echo "The variable value is ${{ VARIABLE }}"
 
 
       - name: Notify on Slack
