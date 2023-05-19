@@ -29,6 +29,7 @@ jobs:
       - name: Run Test - ${{matrix.run}}
         run: npm test
       - name: Set job report variables
+        if: ${{ always() }}
         run: |
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
           sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
