@@ -4,19 +4,9 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":sound: Oh no! Desktop AV test suite Failed",
+                "text": ":sound: Oops! Desktop AV test suite Failed",
                 "emoji": true
             }
-        },
-        {
-            "type": "context",
-            "elements": [
-                {
-                    "type": "plain_text",
-                    "text": "Duration: ${{ env.JOB_TIME }}",
-                    "emoji": true
-                }
-            ]
         },
         {
             "type": "actions",

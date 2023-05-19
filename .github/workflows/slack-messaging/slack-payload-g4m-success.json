@@ -4,7 +4,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":gear: Excellent news! Your Gear4music API test suite has Passed :tada:",
+                "text": ":gear: Excellent! Desktop Gear4music test suite has Passed :tada:",
                 "emoji": true
             }
         },
@@ -15,7 +15,7 @@
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "View Gear4music Results",
+                        "text": "View Results",
                         "emoji": true
                     },
                     "url": "${{ env.URL }}"
