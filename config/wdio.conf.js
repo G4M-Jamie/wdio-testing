@@ -15,11 +15,6 @@ exports.config = {
             await failedSpecFiles++;
         }
        // await totalSpecFiles++;
-
-        const myVariable = "Hello, World!";
-        console.log(`::set-output name=variable::${myVariable}`);
-    },
-    afterSession: function (config, capabilities, specs) {
         // Your existing afterSession logic
 
         // Export testOutput as an environment variable
