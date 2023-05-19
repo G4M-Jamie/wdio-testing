@@ -19,6 +19,11 @@ exports.config = {
         await totalSpecFiles++;
         await process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
+    afterAll: async () => {
+        process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
+        process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
+        process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
+    },
 
     runner: 'local',
     specs: [
