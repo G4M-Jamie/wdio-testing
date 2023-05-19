@@ -11,18 +11,15 @@ exports.config = {
     afterTest: async (test, context, result) => {
         if (result.passed) {
             await passedSpecFiles++;
-            await process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
         } else {
             await failedSpecFiles++;
-            await process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
         }
         await totalSpecFiles++;
-        await process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
     afterAll: async () => {
-        console.log(`::set-env name=WDIO_PASSED_SPECS::${passedSpecFiles}`);
-        console.log(`::set-env name=WDIO_FAILED_SPECS::${failedSpecFiles}`);
-        console.log(`::set-env name=WDIO_TOTAL_SPECS::${totalSpecFiles}`);
+        process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
+        process.stdout.write(`::set-output name=failedSpecFiles::${failedSpecFiles}\n`);
+        process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
 
     runner: 'local',
