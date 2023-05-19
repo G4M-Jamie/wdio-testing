@@ -1,7 +1,6 @@
 name: WDIO Test
 'on':
   - push
-  - workflow_dispatch
 jobs:
   test-runner:
     runs-on: ubuntu-latest
@@ -14,8 +13,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: npm ci
-      - name: Run Desktop WDIO Tests - ${{matrix.run}}
-        run: npm run test:pipeline:desktop -- --suite=e2e-${{matrix.run}}
+      - name: Run Test - ${{matrix.run}}
+        run: npm test
       - name: Set job report variables
         run: |
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
