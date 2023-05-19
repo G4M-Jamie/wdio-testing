@@ -19,9 +19,11 @@ exports.config = {
         const myVariable = "Hello, World!";
         console.log(`::set-output name=variable::${myVariable}`);
     },
-    afterSession: async () => {
+    afterSession: function (config, capabilities, specs) {
+        // Your existing afterSession logic
 
-
+        // Export testOutput as an environment variable
+        process.env.TEST_OUTPUT = testOutput;
     },
 
     runner: 'local',
