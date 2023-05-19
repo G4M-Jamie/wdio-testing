@@ -39,10 +39,11 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-          echo "::set-output name=passedSpecFiles::${{ steps.test.outputs.passedSpecFiles }}"
-          echo "::set-output name=failedSpecFiles::${{ steps.test.outputs.failedSpecFiles }}"
+          echo "PASSED_SPEC_FILES=${{ steps.build.outputs.passedSpecFiles }}" >> $GITHUB_ENV
+          echo "FAILED_SPEC_FILES=${{ steps.build.outputs.failedSpecFiles }}" >> $GITHUB_ENV
 
-
+          sed -i "s/\$PASSED_SPEC_FILES/${{ env.PASSED_SPEC_FILES }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$FAILED_SPEC_FILES/${{ env.FAILED_SPEC_FILES }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
 
       - name: Notify on Slack
