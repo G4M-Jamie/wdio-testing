@@ -1,10 +1,9 @@
-describe("Scroll Bug", function () {
+describe("WDIO Test", function () {
 	before(async function () {
-		await browser.url("/");
-		await $(".g4m-footer").scrollIntoView();
+		await browser.url('https://webdriver.io');
 	});
-	it("displays the Company Number", async function () {
-		const companyInfo = await $(".footer-info-items");
-		await expect(companyInfo).toHaveTextContaining("03113256");
+	it("displays the WDIO Logo", async function () {
+		const wdioLogo = await $(".themedImage_ToTc");
+		await expect(wdioLogo).toBeDisplayed();
 	});
 });
