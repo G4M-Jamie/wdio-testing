@@ -58,14 +58,11 @@ jobs:
           echo "Passed: ${{ steps.test-runner.outputs.passedSpecFiles }}"
           echo "Failed: ${{ steps.test-runner.outputs.failedSpecFiles }}"
 
-      - name: Capture Test Counts
-        if: ${{ always() }}
-        run: |
-          cp test-counts.json $GITHUB_WORKSPACE
       - name: Display Test Counts
-        if: ${{ always() }}
         run: |
-          cat $GITHUB_WORKSPACE/test-counts.json
+          echo "Passed: ${{ env.WDIO_PASSED_SPECS }}"
+          echo "Failed: ${{ env.WDIO_FAILED_SPECS }}"
+          echo "Total: ${{ env.WDIO_TOTAL_SPECS }}"
 
 
       - name: Notify on Slack
@@ -75,5 +72,3 @@ jobs:
           payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
-          PASSED_SPEC_FILES: ${{ steps.test-results.outputs.passedSpecFiles }}
-          FAILED_SPEC_FILES: ${{ steps.test-results.outputs.failedSpecFiles }}

@@ -20,12 +20,9 @@ exports.config = {
         await process.stdout.write(`::set-output name=totalSpecFiles::${totalSpecFiles}\n`);
     },
     afterAll: async () => {
-        const counts = {
-            passedSpecFiles,
-            failedSpecFiles,
-            totalSpecFiles
-        };
-        fs.writeFileSync('test-counts.json', JSON.stringify(counts));
+        console.log(`::set-env name=WDIO_PASSED_SPECS::${passedSpecFiles}`);
+        console.log(`::set-env name=WDIO_FAILED_SPECS::${failedSpecFiles}`);
+        console.log(`::set-env name=WDIO_TOTAL_SPECS::${totalSpecFiles}`);
     },
 
     runner: 'local',
