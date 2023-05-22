@@ -31,7 +31,7 @@
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "View AV Results",
+                        "text": "View Results",
                         "emoji": true
                     },
                     "url": "${{ env.URL }}"

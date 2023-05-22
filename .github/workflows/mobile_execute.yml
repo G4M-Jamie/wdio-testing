@@ -41,63 +41,45 @@ jobs:
       - name: Run Test - ${{ matrix.run }}
         run: npm test
 
-      - name: Upload passed variable
+      - name: Upload variables
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: passed
-          path: passed.txt
+          name: variables
+          path: |
+            passed.txt
+            failed.txt
 
-      - name: Upload failed variable
-        if: ${{ always() }}  
-        uses: actions/upload-artifact@v2
-        with:
-          name: failed
-          path: failed.txt
-
-      - name: Download passed variable
-        if: ${{ always() }}  
+      - name: Download variables
+        if: ${{ always() }}
         uses: actions/download-artifact@v2
         with:
-          name: passed
+          name: variables
           path: .
 
-      - name: Download failed variable
-        if: ${{ always() }}  
-        uses: actions/download-artifact@v2
-        with:
-          name: failed
-          path: .
-
-      - name: Use passed variable
+      - name: Use variables
         if: ${{ always() }}
         run: |
-         export PASSED=$(cat passed.txt)
-         echo "Updated value: $PASSED"
-         echo "PASSED=$PASSED" >> $GITHUB_ENV
 
-      - name: Use failed variable
+      - name: Set job variables for Slack message
         if: ${{ always() }}
         run: |
-         export FAILED=$(cat failed.txt)
-         echo "Updated value: $FAILED"
-         echo "FAILED=$FAILED" >> $GITHUB_ENV
 
-      - name: Set job report variables
-        if: ${{ always() }}
-        run: |
+          export PASSED=$(cat passed.txt)
+          export FAILED=$(cat failed.txt)
+          echo "PASSED=$PASSED" >> $GITHUB_ENV
+          echo "FAILED=$FAILED" >> $GITHUB_ENV
+          sed -i "s/\$PASSED/${{ env.PASSED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$FAILED/${{ env.FAILED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+
+
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
           sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
-          sed -i "s/\$PASSED/${{ env.PASSED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          sed -i "s/\$FAILED/${{ env.FAILED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          echo "PASSED: ${{ env.PASSED }}"
-          echo "FAILED: ${{ env.FAILED }}"
           echo "URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
           sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
-
 
       - name: Notify on Slack
         if: ${{ always() }}
