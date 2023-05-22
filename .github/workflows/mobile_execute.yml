@@ -74,14 +74,14 @@ jobs:
         run: |
          export PASSED=$(cat passed.txt)
          echo "Updated value: $PASSED"
-         echo "::set-env name=PASSED::$PASSED"
+         echo "PASSED=$PASSED" >> $GITHUB_ENV
 
       - name: Use failed variable
         if: ${{ always() }}
         run: |
          export FAILED=$(cat failed.txt)
          echo "Updated value: $FAILED"
-         echo "::set-env name=FAILED::$FAILED"
+         echo "FAILED=$FAILED" >> $GITHUB_ENV
 
       - name: Set job report variables
         if: ${{ always() }}
