@@ -9,11 +9,10 @@ exports.config = {
     },
 
     onComplete: function (exitCode, config, capabilities, results) {
-        console.log("Passed: " + results.passed);
-        console.log("Failed: " + results.failed);
-        process.env.PASSED = results.passed;
-        process.env.FAILED = results.failed;
-        fs.writeFileSync('passed.txt', process.env.PASSED);
+        // console.log("Passed: " + results.passed);
+        // console.log("Failed: " + results.failed);
+        fs.writeFileSync('passed.txt', results.passed);
+        fs.writeFileSync('failed.txt', results.failed);
     },
 
     //let passedSpecFiles = 0;

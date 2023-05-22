@@ -42,21 +42,38 @@ jobs:
       - name: Run Test - ${{ matrix.run }}
         run: npm test
 
-      - name: Upload updated variable
+      - name: Upload passed variable
         uses: actions/upload-artifact@v2
         with:
           name: passed
           path: passed.txt
 
-      - name: Download updated variable
+      - name: Upload failed variable
+        uses: actions/upload-artifact@v2
+        with:
+          name: failed
+          path: failed.txt
+
+      - name: Download passed variable
         uses: actions/download-artifact@v2
         with:
           name: passed
           path: .
 
-      - name: Use updated variable
+      - name: Download failed variable
+        uses: actions/download-artifact@v2
+        with:
+          name: failed
+          path: .
+
+      - name: Use passed variable
         run: |
          value=$(cat passed.txt)
+         echo "Updated value: $value"
+
+      - name: Use failed variable
+        run: |
+         value=$(cat failed.txt)
          echo "Updated value: $value"
 
       - name: Set job report variables
@@ -69,8 +86,4 @@ jobs:
           sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
-
-          echo "Passed: $PASSED"
-          echo "Failed": $FAILED"
-      
 
