@@ -1,26 +1,22 @@
-const browsers = require("./browsers");
-const { incrementTotalSpecFiles, incrementPassedSpecFiles, incrementFailedSpecFiles, getTotalSpecFiles, getPassedSpecFiles, getFailedSpecFiles } = require('./testCounts');
-const fs = require('fs');
-let totalSpecFiles = "Hello world";
-let passedSpecFiles = 0;
-let failedSpecFiles = 0;
+const browsers = require("./browsers.js");
 
 exports.config = {
-    reporters: [['spec', { outputDir: './test-results' }]],
-
-    afterTest: async (test, context, result) => {
-        if (result.passed) {
-            await passedSpecFiles++;
-        } else {
-            await failedSpecFiles++;
-        }
-       // await totalSpecFiles++;
-        // Your existing afterSession logic
-
-        // Export testOutput as an environment variable
-        const testOutput = 1;
-        console.log("::set-env name=TEST_OUTPUT::" + testOutput);
+    suites: {
+        "testSuite": [
+            "../tests/*.spec.js"
+        ]
     },
+
+    onComplete: function (exitCode, config, capabilities, results) {
+        console.log("Passed: " + results.passed);
+        console.log("Failed: " + results.failed);
+        process.env.PASSED = results.passed;
+        process.env.FAILED = results.failed;
+    },
+
+    //let passedSpecFiles = 0;
+    //process.stdout.write(`::set-output name=passedSpecFiles::${passedSpecFiles}\n`);
+    //console.log(`::set-env name=WDIO_PASSED_SPECS::${passedSpecFiles}`);
 
     runner: 'local',
     specs: [
