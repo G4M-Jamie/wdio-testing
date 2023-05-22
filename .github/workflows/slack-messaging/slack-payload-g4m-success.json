@@ -4,7 +4,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":gear: Desktop Gear4music test suite has Passed :tada:  PASSED ${{ env.PASSED }} .   FAILED ${{ env.FAILED }}",
+                "text": ":desktop_computer: Desktop Gear4music test suite has Passed :tada:",
                 "emoji": true
             }
         },
@@ -20,7 +20,7 @@
             "type": "section",
             "text": {
                 "type": "plain_text",
-                "text": ":red_circle: Tests Failed ${{ env.FAILED }}",
+                "text": ":red_circle: Tests Failed: ${{ env.FAILED }}",
                 "emoji": true
             }
         },
