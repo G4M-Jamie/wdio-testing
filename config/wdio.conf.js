@@ -1,4 +1,5 @@
 const browsers = require("./browsers.js");
+const fs = require('fs');
 
 exports.config = {
     suites: {
@@ -12,6 +13,7 @@ exports.config = {
         console.log("Failed: " + results.failed);
         process.env.PASSED = results.passed;
         process.env.FAILED = results.failed;
+        fs.writeFileSync('passed.txt', process.env.PASSED);
     },
 
     //let passedSpecFiles = 0;

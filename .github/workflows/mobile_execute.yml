@@ -42,6 +42,23 @@ jobs:
       - name: Run Test - ${{ matrix.run }}
         run: npm test
 
+      - name: Upload updated variable
+        uses: actions/upload-artifact@v2
+        with:
+          name: passed
+          path: passed.txt
+
+      - name: Download updated variable
+        uses: actions/download-artifact@v2
+        with:
+          name: passed
+          path: .
+
+      - name: Use updated variable
+        run: |
+         value=$(cat passed.txt)
+         echo "Updated value: $value"
+
       - name: Set job report variables
         if: ${{ always() }}
         run: |
@@ -54,13 +71,6 @@ jobs:
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
           echo "Passed: $PASSED"
-          echo "Failed": $PASSED"
+          echo "Failed": $FAILED"
       
-      - name: Notify on Slack
-        if: ${{ always() }}
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          channel-id: "C058GP7SQA0"
-          payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
+
