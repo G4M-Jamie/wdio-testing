@@ -41,29 +41,29 @@ jobs:
         run: npm test
 
       - name: Upload passed variable
-      if: ${{ always() }}  
-      uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
         with:
           name: passed
           path: passed.txt
 
       - name: Upload failed variable
-      if: ${{ always() }}  
-      uses: actions/upload-artifact@v2
+        if: ${{ always() }}  
+        uses: actions/upload-artifact@v2
         with:
           name: failed
           path: failed.txt
 
       - name: Download passed variable
-      if: ${{ always() }}  
-      uses: actions/download-artifact@v2
+        if: ${{ always() }}  
+        uses: actions/download-artifact@v2
         with:
           name: passed
           path: .
 
       - name: Download failed variable
-      if: ${{ always() }}  
-      uses: actions/download-artifact@v2
+        if: ${{ always() }}  
+        uses: actions/download-artifact@v2
         with:
           name: failed
           path: .
