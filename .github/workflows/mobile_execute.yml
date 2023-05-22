@@ -57,10 +57,6 @@ jobs:
           name: variables
           path: .
 
-      - name: Use variables
-        if: ${{ always() }}
-        run: |
-
       - name: Set job variables for Slack message
         if: ${{ always() }}
         run: |
