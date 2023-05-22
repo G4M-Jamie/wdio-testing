@@ -11,8 +11,8 @@ exports.config = {
     onComplete: function (exitCode, config, capabilities, results) {
         // console.log("Passed: " + results.passed);
         // console.log("Failed: " + results.failed);
-        fs.writeFileSync('passed.txt', results.passed);
-        fs.writeFileSync('failed.txt', results.failed);
+        fs.writeFileSync('passed.txt', results.passed.toString());
+        fs.writeFileSync('failed.txt', results.failed.toString());
     },
 
     //let passedSpecFiles = 0;
