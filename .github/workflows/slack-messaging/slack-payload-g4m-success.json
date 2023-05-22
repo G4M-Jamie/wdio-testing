@@ -9,6 +9,22 @@
             }
         },
         {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":large_green_circle: Tests Passed: ${{ env.PASSED }}",
+                "emoji": true
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":red_circle: Tests Failed ${{ env.FAILED }}",
+                "emoji": true
+            }
+        },
+        {
             "type": "actions",
             "elements": [
                 {
