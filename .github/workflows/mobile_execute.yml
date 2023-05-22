@@ -86,8 +86,8 @@ jobs:
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
           sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
-          sed -i "s/\$PASSED/${{ PASSED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          sed -i "s/\$FAILED/${{ FAILED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$PASSED/${{ env.PASSED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$FAILED/${{ env.FAILED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
           sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
