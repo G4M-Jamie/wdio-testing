@@ -74,12 +74,14 @@ jobs:
         run: |
          export PASSED=$(cat passed.txt)
          echo "Updated value: $PASSED"
+         echo "::set-env name=PASSED::$PASSED"
 
       - name: Use failed variable
         if: ${{ always() }}
         run: |
          export FAILED=$(cat failed.txt)
          echo "Updated value: $FAILED"
+         echo "::set-env name=FAILED::$FAILED"
 
       - name: Set job report variables
         if: ${{ always() }}
