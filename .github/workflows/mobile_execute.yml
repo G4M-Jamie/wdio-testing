@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        run: ["g4m"]
+        run: ["g4m", "av"]
 
     steps:
       - name: Checkout code
