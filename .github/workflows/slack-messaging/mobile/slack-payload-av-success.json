@@ -1,0 +1,42 @@
+{
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":iphone: Mobile AV test suite Passed :tada:",
+                "emoji": true
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":large_green_circle: Tests Passed: ${{ env.PASSED }}",
+                "emoji": true
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":red_circle: Tests Failed: ${{ env.FAILED }}",
+                "emoji": true
+            }
+        },
+        {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "View Results",
+                        "emoji": true
+                    },
+                    "url": "${{ env.URL }}"
+                }
+            ]
+        }
+    ]
+}

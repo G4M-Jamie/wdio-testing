@@ -1,7 +1,7 @@
 name: WDIO Test
 
 on:
-  push
+  workflow_dispatch:
  
   
 jobs:
@@ -65,23 +65,32 @@ jobs:
           export FAILED=$(cat failed.txt)
           echo "PASSED=$PASSED" >> $GITHUB_ENV
           echo "FAILED=$FAILED" >> $GITHUB_ENV
-          sed -i "s/\$PASSED/${{ env.PASSED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-          sed -i "s/\$FAILED/${{ env.FAILED }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$PASSED/${{ env.PASSED }}/g" ".github/workflows/slack-messaging/desktop/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$FAILED/${{ env.FAILED }}/g" ".github/workflows/slack-messaging/desktop/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
 
           echo "JOB_STATUS=${{ job.status }}" >> $GITHUB_ENV
-          sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$JOB_STATUS/${{ job.status }}/g" ".github/workflows/slack-messaging/desktop/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
-          sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
+          sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/desktop/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-      - name: Notify on Slack
-        if: ${{ always() }}
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          channel-id: "C058GP7SQA0"
-          payload-file-path: ".github/workflows/slack-messaging/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.WDIO_SLACKBOT_TOKEN }}
+
+      - name: Get User's Slack ID
+        id: get_slack_id
+        run: |
+          # Retrieve the GitHub user login from the event payload
+          github_user_login=$(jq -r '.sender.login' "$GITHUB_EVENT_PATH")
+          
+          # Make a request to the Slack API to get the user's Slack ID
+          slack_user_id=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"user": "'"$github_user_login"'"}' \
+            https://slack.com/api/users.lookupByEmail | jq -r '.user.id')
+          
+          echo "::set-output name=slack_id::$slack_user_id"
+          echo "Slack IDs: $slack_ids"
+
