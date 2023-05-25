@@ -1,4 +1,4 @@
-name: WDIO Test
+name: Slack messaging test
 
 on:
   workflow_dispatch:
@@ -16,23 +16,11 @@ jobs:
           response=$(curl -s -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-type: application/json" \
             -d '{
-              "email": "jamie.pollard@gear4music.com"  // email address of the user who started the workflow
+              "email": "user@example.com"  // Replace with the email address of the user who started the workflow
             }' \
             https://slack.com/api/users.lookupByEmail)
-          echo "::set-output name=user_id::$(echo $response | jq -r '.user.id')"
+          echo "Slack API Response: $response"
+          user_id=$(echo $response | jq -r '.user.id')
           echo "Slack User ID: $user_id"
           echo "::set-output name=user_id::$user_id"
-      
-      - name: Send Slack message
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          USER_ID: ${{ steps.slack-user-id.outputs.user_id }}
-        run: |
-          curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
-            -H "Content-type: application/json" \
-            -d '{
-              "channel": "$USER_ID",
-              "text": "Your workflow has started!"
-            }' \
-            https://slack.com/api/chat.postMessage
 
