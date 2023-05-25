@@ -77,20 +77,29 @@ jobs:
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
 
-
-      - name: Get User's Slack ID
-        id: get_slack_id
+      - name: Get Slack user ID
+        id: slack-user-id
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
         run: |
-          # Retrieve the GitHub user login from the event payload
-          github_user_login=$(jq -r '.sender.login' "$GITHUB_EVENT_PATH")
-          
-          # Make a request to the Slack API to get the user's Slack ID
-          slack_user_id=$(curl -s -X POST \
-            -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{"user": "'"$github_user_login"'"}' \
-            https://slack.com/api/users.lookupByEmail | jq -r '.user.id')
-          
-          echo "::set-output name=slack_id::$slack_user_id"
-          echo "Slack IDs: $slack_ids"
+          response=$(curl -s -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-type: application/json" \
+            -d '{
+              "email": "user@example.com"  // Replace with the email address of the user who started the workflow
+            }' \
+            https://slack.com/api/users.lookupByEmail)
+          echo "::set-output name=user_id::$(echo $response | jq -r '.user.id')"
+      
+      - name: Send Slack message
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          USER_ID: ${{ steps.slack-user-id.outputs.user_id }}
+        run: |
+          curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-type: application/json" \
+            -d '{
+              "channel": "@$USER_ID",
+              "text": "Your workflow has started!"
+            }' \
+            https://slack.com/api/chat.postMessage
 
