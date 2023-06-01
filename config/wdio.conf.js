@@ -17,9 +17,25 @@ exports.config = {
             const specialCharactersTestName = /[:<>|*?@ ]/g;
             const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
             const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
-            fs.ensureDirSync(`./screenshots/${describeBlockName}`);
-            await console.log(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
-            await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
+            const screenshotsDir = `./screenshots/${describeBlockName}`;
+
+            fs.ensureDirSync(screenshotsDir);
+            await browser.saveScreenshot(`${screenshotsDir}/${nameOfTest}.png`);
+
+            await browser.pause(1000);
+
+            const screenshotFolderPath = './screenshots';
+            fs.readdir(screenshotFolderPath, (err, files) => {
+                if (err) {
+                    console.error(`Error reading screenshot folder: ${err}`);
+                    return;
+                }
+
+                console.log(`Contents of screenshot folder (${screenshotFolderPath}):`);
+                files.forEach((file) => {
+                    console.log(file);
+                });
+            });
         }
     },
 
