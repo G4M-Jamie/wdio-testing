@@ -24,7 +24,7 @@ exports.config = {
 
             await browser.pause(1000);
 
-            const screenshotFolderPath = './screenshots';
+            const screenshotFolderPath = './screenshots/WDIOTest';
             fs.readdir(screenshotFolderPath, (err, files) => {
                 if (err) {
                     console.error(`Error reading screenshot folder: ${err}`);
