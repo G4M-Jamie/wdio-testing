@@ -47,6 +47,6 @@ jobs:
         with:
           name: test-artifacts-desktop-${{matrix.run}}
           path: |
-            screenshots/*.png
+            screenshots/**/*.png
 
 
