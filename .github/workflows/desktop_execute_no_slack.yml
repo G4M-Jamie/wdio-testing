@@ -1,0 +1,52 @@
+name: WDIO Test
+
+on:
+  workflow_dispatch:
+ 
+  
+jobs:
+  test-runner:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        run: ["g4m"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update All Packages
+        run: sudo apt-get update -y
+
+      - name: Download Chrome browser
+        run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+      - name: Install Chrome browser
+        run: sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: NPM Install
+        run: npm install
+
+      - name: Install specific version of Chromedriver for GH
+        run: npm install chromedriver@${{ vars.CHROME_VERSION }}
+
+      - name: Run Test - ${{ matrix.run }}
+        run: npm test
+
+      - name: Upload Desktop Report Artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-artifacts-desktop-${{matrix.run}}
+          path: |
+            screenshots/*.png
+
+

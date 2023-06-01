@@ -8,6 +8,17 @@ exports.config = {
         ]
     },
 
+    afterTest: async (test, _context, result) => {
+        if (result.passed === false){
+            const specialCharactersDescribe = /[:<>|*?@ ]/g;
+            const specialCharactersTestName = /[:<>|*?@]/g;
+            const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
+            const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
+            fs.ensureDirSync(`./screenshots/${describeBlockName}`);
+            return await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
+        }
+    },
+
     onComplete: function (exitCode, config, capabilities, results) {
         // console.log("Passed: " + results.passed);
         // console.log("Failed: " + results.failed);
