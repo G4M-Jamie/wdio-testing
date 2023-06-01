@@ -1,4 +1,4 @@
-name: WDIO Test
+name: WDIO Test No Slack
 
 on:
   workflow_dispatch:
