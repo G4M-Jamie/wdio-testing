@@ -9,33 +9,12 @@ exports.config = {
     },
 
     afterTest: async (test, _context, result) => {
-        await console.log("after test hook entered")
-        await console.log("result is: " +result.passed);
         if (result.passed === false){
-            await console.log("inside the if statement");
-            const specialCharactersDescribe = /[:<>|*?@ ]/g;
-            const specialCharactersTestName = /[:<>|*?@ ]/g;
-            const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
-            const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
-            const screenshotsDir = `./screenshots/${describeBlockName}`;
-
-            fs.ensureDirSync(screenshotsDir);
-            await browser.saveScreenshot(`${screenshotsDir}/${nameOfTest}.png`);
-
-            await browser.pause(1000);
-
-            const screenshotFolderPath = './screenshots/WDIOTest';
-            fs.readdir(screenshotFolderPath, (err, files) => {
-                if (err) {
-                    console.error(`Error reading screenshot folder: ${err}`);
-                    return;
-                }
-
-                console.log(`Contents of screenshot folder (${screenshotFolderPath}):`);
-                files.forEach((file) => {
-                    console.log(file);
-                });
-            });
+            const specialCharacters = /[:<>|*?@]/g;
+            const describeBlockName = `${test.parent}`.replace(specialCharacters, "");
+            const nameOfTest = `${test.title}`.replace(specialCharacters, "-");
+            fs.ensureDirSync(`./screenshots/${describeBlockName}`);
+            await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
         }
     },
 
