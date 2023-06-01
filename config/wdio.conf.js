@@ -15,6 +15,7 @@ exports.config = {
             const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
             const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
             fs.ensureDirSync(`./screenshots/${describeBlockName}`);
+            await console.log(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
             return await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
         }
     },
