@@ -14,7 +14,7 @@ exports.config = {
         if (result.passed === false){
             await console.log("inside the if statement");
             const specialCharactersDescribe = /[:<>|*?@ ]/g;
-            const specialCharactersTestName = /[:<>|*?@]/g;
+            const specialCharactersTestName = /[:<>|*?@ ]/g;
             const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
             const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
             fs.ensureDirSync(`./screenshots/${describeBlockName}`);
