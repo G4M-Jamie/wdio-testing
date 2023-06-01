@@ -9,14 +9,17 @@ exports.config = {
     },
 
     afterTest: async (test, _context, result) => {
+        await console.log("after test hook entered")
+        await console.log("result is: " +result.passed);
         if (result.passed === false){
+            await console.log("inside the if statement");
             const specialCharactersDescribe = /[:<>|*?@ ]/g;
             const specialCharactersTestName = /[:<>|*?@]/g;
             const describeBlockName = `${test.parent}`.replace(specialCharactersDescribe, "");
             const nameOfTest = `${test.title}`.replace(specialCharactersTestName, "-");
             fs.ensureDirSync(`./screenshots/${describeBlockName}`);
             await console.log(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
-            return await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
+            await browser.saveScreenshot(`./screenshots/${describeBlockName}/${nameOfTest}.png`);
         }
     },
 
