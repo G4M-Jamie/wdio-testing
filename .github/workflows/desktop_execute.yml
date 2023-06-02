@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Update All Packages
         run: sudo apt-get update -y
@@ -43,7 +43,7 @@ jobs:
 
       - name: Upload variables
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: variables
           path: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Download variables
         if: ${{ always() }}
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: variables
           path: .
@@ -76,30 +76,4 @@ jobs:
           sed -i "s/\$URL/${{ env.URL }}/g" ".github/workflows/slack-messaging/desktop/slack-payload-${{ matrix.run }}-${{ job.status }}.json"
 
           echo "MATRIX_RUN=${{ matrix.run }}" >> $GITHUB_ENV
-
-      - name: Get Slack user ID
-        id: slack-user-id
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-        run: |
-          response=$(curl -s -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
-            -H "Content-type: application/json" \
-            -d '{
-              "email": "user@example.com"  // Replace with the email address of the user who started the workflow
-            }' \
-            https://slack.com/api/users.lookupByEmail)
-          echo "::set-output name=user_id::$(echo $response | jq -r '.user.id')"
-      
-      - name: Send Slack message
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          USER_ID: ${{ steps.slack-user-id.outputs.user_id }}
-        run: |
-          curl -X POST -H "Authorization: Bearer $SLACK_TOKEN" \
-            -H "Content-type: application/json" \
-            -d '{
-              "channel": "@$USER_ID",
-              "text": "Your workflow has started!"
-            }' \
-            https://slack.com/api/chat.postMessage
 
