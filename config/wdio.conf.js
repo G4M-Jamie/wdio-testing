@@ -3,8 +3,8 @@ const fs = require("fs-extra");
 
 exports.config = {
     suites: {
-        "testSuite": [
-            "../tests/*.spec.js"
+        "desktop-testSuite": [
+            "../tests/desktop/*.spec.js"
         ]
     },
 

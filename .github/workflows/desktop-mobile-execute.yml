@@ -75,7 +75,7 @@ jobs:
       - name: Install specific version of Chromedriver for GH
         run: npm install chromedriver@${{vars.CHROME_VERSION}}
       - name: Run desktop WDIO Tests
-        run: npm run test -- --spec=./tests/${{ github.event.inputs.DESKTOP_OR_MOBILE }}/homepage2.spec.js
+        run: npm run test -- --suite=${{ github.event.inputs.DESKTOP_OR_MOBILE }}-testSuite
       - name: Upload desktop Report Artifacts
         uses: actions/upload-artifact@v3
         if: always()
