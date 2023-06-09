@@ -16,7 +16,6 @@ on:
         description: "Environment"
         options:
           - PRODUCTION
-          - STAGING
           - MANAGED_ENV
         required: false
       # The below is only used if 'WDIO_ENV' = 'MANAGED_ENV'
@@ -28,7 +27,7 @@ env:
   WDIO_ENV: ${{ github.event.inputs.WDIO_ENV_ID }}
   # The below is only used if 'WDIO_ENV' = 'MANAGED_ENV'
   MANAGED_ENV_ID: ${{ github.event.inputs.MANAGED_ENV_ID }}
-  MAX_INSTANCES: ${{ vars.MAX_INSTANCES }}
+  MAX_INSTANCES: ${{ github.event.inputs.WDIO_ENV_ID == 'PRODUCTION' && 'MAX_INSTANCES_PRODUCTION' || 'MAX_INSTANCES_MANAGED_ENV' }}
   REPORT_ONLY_SHOWS_FAILS: true
 jobs:
   wdio-tests:
