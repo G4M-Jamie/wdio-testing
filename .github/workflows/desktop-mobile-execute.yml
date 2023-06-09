@@ -32,7 +32,7 @@ env:
   REPORT_ONLY_SHOWS_FAILS: true
 jobs:
   wdio-tests:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
