@@ -38,7 +38,7 @@ exports.config = {
         // 'path/to/excluded/files'
     ],
    
-    maxInstances: 1,
+    maxInstances: parseInt(process.env.MAX_INSTANCES) || 1,
 
     capabilities: [
         browsers.chromeMobileHeadless
