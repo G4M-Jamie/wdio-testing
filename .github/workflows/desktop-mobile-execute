@@ -1,0 +1,87 @@
+# Run WDIO E2E tests against an envionment
+name: Execute WDIO Tests Against an Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      DESKTOP_OR_MOBILE:
+        type: choice
+        description: "Desktop or Mobile"
+        options:
+          - desktop
+          - mobile
+        required: true
+      WDIO_ENV_ID:
+        type: choice
+        description: "Environment"
+        options:
+          - PRODUCTION
+          - STAGING
+          - MANAGED_ENV
+        required: false
+      # The below is only used if 'WDIO_ENV' = 'MANAGED_ENV'
+      MANAGED_ENV_ID:
+        description: "Managed Environment ID"
+        required: false
+        default: "SUP-1234"
+env:
+  WDIO_ENV: ${{ github.event.inputs.WDIO_ENV_ID }}
+  # The below is only used if 'WDIO_ENV' = 'MANAGED_ENV'
+  MANAGED_ENV_ID: ${{ github.event.inputs.MANAGED_ENV_ID }}
+  MAX_INSTANCES: ${{ vars.MAX_INSTANCES }}
+  REPORT_ONLY_SHOWS_FAILS: true
+jobs:
+  wdio-tests:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Update All Packages
+        run: sudo apt-get update -y
+      - name: Install Chrome dependencies
+        run: >-
+          sudo apt-get install -y
+          fonts-liberation
+          libasound2
+          libatk-bridge2.0-0
+          libatk1.0-0
+          libatspi2.0-0
+          libcairo2
+          libcups2
+          libdrm2
+          libgbm1
+          libgtk-3-0
+          libnspr4
+          libnss3
+          libpango-1.0-0
+          libu2f-udev
+          libvulkan1
+          libxcomposite1
+          libxdamage1
+          libxfixes3
+          libxkbcommon0
+          libxrandr2
+          xdg-utils
+      - name: Download Chrome browser
+        run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      - name: Install Chrome browser
+        run: sudo dpkg -i google-chrome-stable_current_amd64.deb
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - name: NPM Install
+        run: npm install
+      - name: Install specific version of Chromedriver for GH
+        run: npm install chromedriver@${{vars.CHROME_VERSION}}
+      - name: Run desktop WDIO Tests
+        run: npm run test -- --spec=./tests/${{ github.event.inputs.DESKTOP_OR_MOBILE }}/homepage2.spec.js
+      - name: Upload desktop Report Artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-artifacts-desktop
+          path: |
+            allure-results/*.png
+            screenshots/**/*.png
